@@ -1,0 +1,6 @@
+# Dynamic configuration
+
+tls:
+    certificates:
+      - certFile: /var/certs/localhost.cert
+        keyFile: /var/certs/localhost.key
