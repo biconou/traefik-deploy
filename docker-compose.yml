@@ -1,9 +1,10 @@
-version: "3.3"
+version: "3.7"
 
 services:
 
   traefik:
     image: "traefik:v2.3"
+    restart: unless-stopped
     container_name: "traefik"
     command:
       #- "--log.level=DEBUG"
@@ -11,23 +12,33 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure-dev.address=:444"
+      - "--entrypoints.websecure-test.address=:446"
       - "--providers.file.directory=/var/config"
       - "--providers.file.watch=true"
+      - "--accesslog=true"
     ports:
       - "80:80"
       - "8080:8080"
-      - "443:443"
+      - "444:444"
+      - "446:446"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./certs:/var/certs"
-      - "./config:/var/config"
+      # - "./certs:/var/certs"
+      # - "./config:/var/config"
+    networks:
+      - web
 
-  whoami:
-    image: "traefik/whoami"
-    container_name: "simple-service"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`localhost`)"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls"
+  # whoami:
+  #   image: "traefik/whoami"
+  #   container_name: "simple-service"
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.whoami.rule=Host(`localhost`)"
+  #     - "traefik.http.routers.whoami.entrypoints=websecure"
+  #     - "traefik.http.routers.whoami.tls"
+
+networks:
+  web:
+    name: traefik_web
+  
