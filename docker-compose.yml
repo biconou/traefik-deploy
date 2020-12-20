@@ -12,16 +12,21 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure-dev.address=:444"
       - "--entrypoints.websecure-test.address=:446"
+      - "--entrypoints.websecure-prod.address=:447"
+      - "--entrypoints.websecure-whoami.address=:449"
       - "--providers.file.directory=/var/config"
       - "--providers.file.watch=true"
       - "--accesslog=true"
     ports:
-      - "80:80"
+#      - "80:80"
       - "8080:8080"
       - "444:444"
       - "446:446"
+      - "447:447"
+      - "449:449"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       # - "./certs:/var/certs"
@@ -29,15 +34,17 @@ services:
     networks:
       - web
 
-  # whoami:
-  #   image: "traefik/whoami"
-  #   container_name: "simple-service"
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.whoami.rule=Host(`localhost`)"
-  #     - "traefik.http.routers.whoami.entrypoints=websecure"
-  #     - "traefik.http.routers.whoami.tls"
-
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`biconou.freeboxos.fr`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure-whoami"
+      - "traefik.http.routers.whoami.tls"
+    networks:
+      - web
+  
 networks:
   web:
     name: traefik_web
