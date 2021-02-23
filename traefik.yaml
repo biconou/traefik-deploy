@@ -7,8 +7,6 @@ entryPoints:
 
   websecure:
     address: :443
-    # http:
-    #   tls: true
 
   websecure-dev:
     address: :444
@@ -32,9 +30,10 @@ providers:
 #     directory: /etc/traefik/custom/
 #     watch: true
 
-# certificatesResolvers:
-#   myresolver:
-#     acme:
-#       email: "foo.bar@mydomain.com"
-#       storage: "/letsencrypt/acme.json"
-#       tlsChallenge: {}
+certificatesResolvers:
+  leresolver:
+    acme:
+      email: "remi.cocula@gmx.fr"
+      storage: "/letsencrypt/acme.json"
+      httpChallenge:
+        entryPoint: web

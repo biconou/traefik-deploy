@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     container_name: "traefik"
     ports:
-#      - "80:80"
+      - "80:80"
       - "8080:8080"
       - "444:444"
       - "446:446"
@@ -20,8 +20,7 @@ services:
       - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
       # # custom folder with dynamic configuration
       # - ./custom:/etc/traefik/custom:ro
-      # # ssl volumes to store acme.json
-      # - certs:/letsencrypt
+      - ./letsencrypt:/letsencrypt
     networks:
       - web
 
@@ -32,7 +31,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`biconou.freeboxos.fr`)"
       - "traefik.http.routers.whoami.entrypoints=websecure-whoami"
-      - "traefik.http.routers.whoami.tls"
+      - "traefik.http.routers.whoami.tls=true"
+      - "traefik.http.routers.whoami.tls.certresolver=leresolver"
     networks:
       - web
   
