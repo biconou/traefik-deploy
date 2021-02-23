@@ -6,20 +6,6 @@ services:
     image: "traefik:v2.3"
     restart: unless-stopped
     container_name: "traefik"
-    command:
-      #- "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.websecure-dev.address=:444"
-      - "--entrypoints.websecure-test.address=:446"
-      - "--entrypoints.websecure-prod.address=:447"
-      - "--entrypoints.websecure-whoami.address=:449"
-      - "--providers.file.directory=/var/config"
-      - "--providers.file.watch=true"
-      - "--accesslog=true"
     ports:
 #      - "80:80"
       - "8080:8080"
@@ -28,9 +14,14 @@ services:
       - "447:447"
       - "449:449"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      # - "./certs:/var/certs"
-      # - "./config:/var/config"
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      # traefik static configuration
+      - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
+      # # custom folder with dynamic configuration
+      # - ./custom:/etc/traefik/custom:ro
+      # # ssl volumes to store acme.json
+      # - certs:/letsencrypt
     networks:
       - web
 

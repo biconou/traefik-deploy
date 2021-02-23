@@ -1,0 +1,40 @@
+api:
+  insecure: true
+
+entryPoints:
+  web:
+    address: :80
+
+  websecure:
+    address: :443
+    # http:
+    #   tls: true
+
+  websecure-dev:
+    address: :444
+  
+  websecure-test:
+    address: :446
+    
+  websecure-prod:
+    address: :447
+      
+  websecure-whoami:
+    address: :449
+
+    # accessLog: {}
+
+providers:
+  docker:
+    exposedByDefault: false
+
+#   file:
+#     directory: /etc/traefik/custom/
+#     watch: true
+
+# certificatesResolvers:
+#   myresolver:
+#     acme:
+#       email: "foo.bar@mydomain.com"
+#       storage: "/letsencrypt/acme.json"
+#       tlsChallenge: {}
