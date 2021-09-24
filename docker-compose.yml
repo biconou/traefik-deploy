@@ -21,6 +21,7 @@ services:
       # # custom folder with dynamic configuration
       # - ./custom:/etc/traefik/custom:ro
       - ./letsencrypt:/letsencrypt
+      - /mnt/DATA/traefik-data:/var/traefik/
     networks:
       - web
 

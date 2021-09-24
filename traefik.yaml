@@ -20,7 +20,8 @@ entryPoints:
   websecure-whoami:
     address: :449
 
-    # accessLog: {}
+accessLog:
+  filePath: "/var/traefik/access.log"
 
 providers:
   docker:
